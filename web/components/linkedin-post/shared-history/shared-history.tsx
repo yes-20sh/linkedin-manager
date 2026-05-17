@@ -66,7 +66,7 @@ export function SharedHistory({ posts, onBulkDelete }: SharedHistoryProps) {
   };
 
   return (
-    <Card className="bg-card/25 border-border/40 backdrop-blur-sm shadow-xs overflow-hidden relative">
+    <Card className="bg-card/25 border-border/40 backdrop-blur-sm shadow-xs overflow-hidden relative pb-0">
       <CardHeader className="flex flex-row items-start sm:items-center justify-between space-y-0 pb-4 gap-4">
         <div className="space-y-1.5">
           <CardTitle className="text-base font-semibold">
