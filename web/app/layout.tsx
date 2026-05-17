@@ -1,16 +1,17 @@
 import type { Metadata } from "next";
-import { Roboto, Roboto_Mono } from "next/font/google";
+import { Plus_Jakarta_Sans, Roboto_Mono } from "next/font/google";
 import "./globals.css";
 import { ThemeProvider } from "@/components/theme-provider";
 
-const roboto = Roboto({
-  weight: ['300', '400', '500', '700'],
+const plusJakartaSans = Plus_Jakarta_Sans({
+  weight: ["300", "400", "500", "600", "700", "800"],
   variable: "--font-sans",
   subsets: ["latin"],
+  display: "swap",
 });
 
 const robotoMono = Roboto_Mono({
-  weight: ['400', '500', '700'],
+  weight: ["400", "500", "700"],
   variable: "--font-mono",
   subsets: ["latin"],
 });
@@ -28,7 +29,7 @@ export default function RootLayout({
   return (
     <html
       lang="en"
-      className={`${roboto.variable} ${robotoMono.variable} h-full antialiased`}
+      className={`${plusJakartaSans.variable} ${robotoMono.variable} h-full antialiased`}
       suppressHydrationWarning
     >
       <body className="min-h-full flex flex-col">
