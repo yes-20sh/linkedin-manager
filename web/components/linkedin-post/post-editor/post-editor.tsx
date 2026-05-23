@@ -41,7 +41,7 @@ export function PostEditor({
     <Card className="bg-card/25 border-border/40 backdrop-blur-sm shadow-xs">
       <CardHeader>
         <CardTitle className="text-base font-semibold flex items-center gap-2">
-          <Sparkles className="h-4 w-4 text-purple-500" />
+          <Sparkles className="h-4 w-4 text-indigo-500" />
           Craft Your Next Post
         </CardTitle>
         <CardDescription className="text-xs">
@@ -59,7 +59,7 @@ export function PostEditor({
               placeholder="e.g. Scaling automation sheet tip"
               value={postTitle}
               onChange={(e) => setPostTitle(e.target.value)}
-              className="h-10 bg-secondary/10 border-border/40 text-xs sm:text-sm placeholder:text-muted-foreground/60 focus-visible:ring-purple-600/25 focus-visible:border-purple-600/50"
+              className="h-10 bg-secondary/10 border-border/40 text-xs sm:text-sm placeholder:text-muted-foreground/60 focus-visible:ring-indigo-600/25 focus-visible:border-indigo-600/50"
             />
           </div>
 
@@ -78,7 +78,7 @@ export function PostEditor({
               placeholder="What do you want to share with your network today?"
               value={postContent}
               onChange={(e) => setPostContent(e.target.value)}
-              className="bg-secondary/10 border-border/40 text-xs sm:text-sm placeholder:text-muted-foreground/60 focus-visible:ring-purple-600/25 focus-visible:border-purple-600/50 min-h-[160px]"
+              className="bg-secondary/10 border-border/40 text-xs sm:text-sm placeholder:text-muted-foreground/60 focus-visible:ring-indigo-600/25 focus-visible:border-indigo-600/50 min-h-[160px]"
             />
           </div>
 
@@ -97,7 +97,7 @@ export function PostEditor({
                 type="button"
                 onClick={() => setIsInstantPublish(!isInstantPublish)}
                 className={`relative inline-flex h-5 w-9 shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-none ${
-                  isInstantPublish ? "bg-purple-600" : "bg-muted"
+                  isInstantPublish ? "bg-indigo-600" : "bg-muted"
                 }`}
               >
                 <span
@@ -111,7 +111,7 @@ export function PostEditor({
             {!isInstantPublish && (
               <div className="space-y-2 pt-2 border-t border-border/10 animate-in fade-in duration-200">
                 <Label htmlFor="time" className="text-xs font-semibold text-foreground/80 flex items-center gap-1.5">
-                  <Clock className="h-3.5 w-3.5 text-purple-500" />
+                  <Clock className="h-3.5 w-3.5 text-indigo-500" />
                   Schedule Date & Time
                 </Label>
                 <Input
@@ -119,7 +119,7 @@ export function PostEditor({
                   type="datetime-local"
                   value={scheduledTime}
                   onChange={(e) => setScheduledTime(e.target.value)}
-                  className="h-10 bg-secondary/10 border-border/40 text-xs sm:text-sm focus-visible:ring-purple-600/25 focus-visible:border-purple-600/50 max-w-xs"
+                  className="h-10 bg-secondary/10 border-border/40 text-xs sm:text-sm focus-visible:ring-indigo-600/25 focus-visible:border-indigo-600/50 max-w-xs"
                 />
               </div>
             )}
@@ -127,7 +127,7 @@ export function PostEditor({
 
           <Button
             type="submit"
-            className="w-full h-10 text-xs sm:text-sm bg-purple-600 hover:bg-purple-500 text-white font-semibold shadow-lg shadow-purple-600/10 transition-all hover:scale-[1.01]"
+            className="w-full h-10 text-xs sm:text-sm bg-indigo-600 hover:bg-indigo-500 text-white font-semibold shadow-lg shadow-indigo-600/10 transition-all hover:scale-[1.01]"
           >
             {isInstantPublish ? "Share Post Now" : "Schedule LinkedIn Post"}
           </Button>

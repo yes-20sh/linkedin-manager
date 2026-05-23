@@ -1,23 +1,13 @@
 "use client";
 
 import React, { useState } from "react";
-import {
-  SquarePen,
-  Calendar,
-  History,
-  FileText,
-  CheckCircle,
-  AlertCircle,
-  X,
-  Lightbulb,
-} from "lucide-react";
+import { CheckCircle, AlertCircle, X } from "lucide-react";
 
 import { ScheduledQueue } from "./scheduled-queue/scheduled-queue";
 import { SharedHistory } from "./shared-history/shared-history";
 import { TemplatesGrid } from "./templates-grid/templates-grid";
-import { PostTopics, type PostTopic } from "./post-topics/post-topics";
 import { Alert, AlertTitle, AlertDescription } from "@/components/ui/alert";
-import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
+import { useSearchParams } from "next/navigation";
 
 interface ScheduledPost {
   id: string;
@@ -25,6 +15,7 @@ interface ScheduledPost {
   content: string;
   time: string;
   status: "Pending" | "Ready";
+  imageUrl?: string;
 }
 
 interface SharedPost {
@@ -36,6 +27,7 @@ interface SharedPost {
   likes: number;
   comments: number;
   topic?: string;
+  imageUrl?: string;
 }
 
 interface PostTemplate {
@@ -51,16 +43,13 @@ interface PostTemplate {
   uses?: number;
 }
 
-export function LinkedinPostContainer() {
-  const [activeTab, setActiveTab] = useState<
-    "scheduled" | "shared" | "topics" | "templates"
-  >("shared");
+const generateId = (prefix: string) =>
+  `${prefix}_${Math.random().toString(36).substr(2, 9)}`;
 
-  // Post Editor States
-  const [postTitle, setPostTitle] = useState("");
-  const [postContent, setPostContent] = useState("");
-  const [scheduledTime, setScheduledTime] = useState("");
-  const [isInstantPublish, setIsInstantPublish] = useState(false);
+export function LinkedinPostContainer() {
+  const searchParams = useSearchParams();
+  const activeTab = searchParams.get("tab") || "shared";
+
   const [alertMessage, setAlertMessage] = useState<{
     type: "success" | "error";
     text: string;
@@ -83,6 +72,7 @@ export function LinkedinPostContainer() {
       content: "Deep dive into performance optimizations...",
       time: "2026-05-18 10:00 AM",
       status: "Pending",
+      imageUrl: "https://images.unsplash.com/photo-1627398240411-8bbeb736561f?auto=format&fit=crop&w=400&q=80",
     },
     {
       id: "s2",
@@ -93,7 +83,7 @@ export function LinkedinPostContainer() {
     },
   ]);
 
-  const [sharedPosts, setSharedPosts] = useState<SharedPost[]>([
+  const [sharedPosts] = useState<SharedPost[]>([
     {
       id: "p1",
       title: "Why AI Agents are the Future of Software Engineering",
@@ -104,6 +94,8 @@ export function LinkedinPostContainer() {
       likes: 142,
       comments: 28,
       topic: "Tech & AI",
+      imageUrl:
+        "https://images.unsplash.com/photo-1677442136019-21780ecad995?auto=format&fit=crop&w=400&q=80",
     },
     {
       id: "p2",
@@ -115,6 +107,8 @@ export function LinkedinPostContainer() {
       likes: 89,
       comments: 12,
       topic: "Design",
+      imageUrl:
+        "https://images.unsplash.com/photo-1558655146-d09347e92766?auto=format&fit=crop&w=400&q=80",
     },
     {
       id: "p3",
@@ -127,20 +121,29 @@ export function LinkedinPostContainer() {
       comments: 94,
       topic: "Startup",
     },
-  ]);
-
-  const [postTopics, setPostTopics] = useState<PostTopic[]>([
     {
-      id: "pt1",
-      topic: "The evolution of frontend frameworks in 2026",
-      scheduleDate: "2026-05-25",
-      status: "AI Created",
+      id: "p4",
+      title: "Mastering Next.js 14 App Router",
+      content:
+        "Server Components have completely changed the way we think about React architecture...",
+      time: "2 weeks ago",
+      link: "https://linkedin.com/posts/nextjs-14-router",
+      likes: 320,
+      comments: 45,
+      topic: "Web Dev",
+      imageUrl:
+        "https://images.unsplash.com/photo-1633356122544-f134324a6cee?auto=format&fit=crop&w=400&q=80",
     },
     {
-      id: "pt2",
-      topic: "How to negotiate a higher salary as a developer",
-      scheduleDate: "2026-06-01",
-      status: "Pending",
+      id: "p5",
+      title: "The Reality of Remote Work in 2026",
+      content:
+        "Is the hybrid model actually working? Here is what the data from 500 tech companies reveals...",
+      time: "3 weeks ago",
+      link: "https://linkedin.com/posts/remote-work-reality",
+      likes: 215,
+      comments: 56,
+      topic: "Culture",
     },
   ]);
 
@@ -190,48 +193,6 @@ export function LinkedinPostContainer() {
     null,
   );
 
-  // Handle Actions
-  const handleCreatePost = (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!postTitle || !postContent) {
-      triggerAlert("error", "Please provide both a title and post content.");
-      return;
-    }
-
-    if (isInstantPublish) {
-      const newPost: SharedPost = {
-        id: "p_" + Date.now(),
-        title: postTitle,
-        content: postContent,
-        time: "Just now",
-        link: "https://linkedin.com/posts/simulated_" + Date.now(),
-        likes: 0,
-        comments: 0,
-      };
-      setSharedPosts([newPost, ...sharedPosts]);
-      triggerAlert("success", "Post successfully shared to LinkedIn!");
-    } else {
-      if (!scheduledTime) {
-        triggerAlert("error", "Please select a scheduled date and time.");
-        return;
-      }
-      const newScheduled: ScheduledPost = {
-        id: "s_" + Date.now(),
-        title: postTitle,
-        content: postContent,
-        time: scheduledTime.replace("T", " "),
-        status: "Pending",
-      };
-      setScheduledPosts([newScheduled, ...scheduledPosts]);
-      triggerAlert("success", "Post successfully scheduled!");
-    }
-
-    // Reset fields
-    setPostTitle("");
-    setPostContent("");
-    setScheduledTime("");
-  };
-
   const handleDeleteScheduled = (id: string) => {
     setScheduledPosts(scheduledPosts.filter((post) => post.id !== id));
     triggerAlert("success", "Scheduled post successfully removed.");
@@ -253,15 +214,6 @@ export function LinkedinPostContainer() {
       ),
     );
 
-    // Filter out emojis from draft title
-    const cleanTitle = template.title
-      .replace(
-        /[\u2700-\u27BF]|[\uE000-\uF8FF]|\uD83C[\uDC00-\uDFFF]|\uD83D[\uDC00-\uDFFF]|[\u2011-\u26FF]|\uD83E[\uDD00-\uDFFF]/g,
-        "",
-      )
-      .trim();
-    setPostTitle(cleanTitle + " Draft");
-    setPostContent(template.content || "");
     triggerAlert("success", `Loaded "${template.title}" into draft editor!`);
   };
 
@@ -304,7 +256,7 @@ export function LinkedinPostContainer() {
       triggerAlert("success", "Template successfully updated!");
     } else {
       const newTemplate: PostTemplate = {
-        id: "t_" + Date.now(),
+        id: generateId("t"),
         title: templateTitle,
         topic: templateTopic,
         category: templateTopic,
@@ -324,35 +276,6 @@ export function LinkedinPostContainer() {
     setTemplateAiPrompt("");
     setTemplateHtmlImageTemplate("");
     setShowAddTemplate(false);
-  };
-
-  const handleDeleteTopic = (id: string) => {
-    setPostTopics(postTopics.filter((t) => t.id !== id));
-    triggerAlert("success", "Topic successfully deleted.");
-  };
-
-  const handleBulkDeleteTopics = (ids: string[]) => {
-    setPostTopics(postTopics.filter((t) => !ids.includes(t.id)));
-    triggerAlert("success", `Successfully removed ${ids.length} topics.`);
-  };
-
-  const handleTopicStatusChange = (
-    id: string,
-    status: "Pending" | "AI Created",
-  ) => {
-    setPostTopics(postTopics.map((t) => (t.id === id ? { ...t, status } : t)));
-    triggerAlert("success", `Topic status changed to ${status}.`);
-  };
-
-  const handleGenerateContent = (id: string) => {
-    triggerAlert(
-      "success",
-      "AI generation started! This will take a few seconds.",
-    );
-    // Simulate generation
-    setTimeout(() => {
-      handleTopicStatusChange(id, "AI Created");
-    }, 2000);
   };
 
   const handleDeleteTemplate = (id: string) => {
@@ -376,7 +299,7 @@ export function LinkedinPostContainer() {
   };
 
   return (
-    <div className="space-y-6 max-w-6xl mx-auto animate-in fade-in duration-300">
+    <div className="space-y-6 w-full animate-in fade-in duration-300 p-2 min-h-screen">
       {/* Floating Popover Alerts with Close Dismissal */}
       {alertMessage && (
         <div className="fixed top-6 left-1/2 -translate-x-1/2 z-50 max-w-md w-[calc(100vw-3rem)] animate-in fade-in slide-in-from-top-4 duration-300">
@@ -384,7 +307,7 @@ export function LinkedinPostContainer() {
             variant={alertMessage.type === "error" ? "destructive" : "default"}
             className={`shadow-2xl border backdrop-blur-md relative pr-10 ${
               alertMessage.type === "success"
-                ? "bg-purple-500/10 border-purple-500/20 text-purple-600 dark:text-purple-400"
+                ? "bg-indigo-500/10 border-indigo-500/20 text-indigo-600 dark:text-indigo-400"
                 : "bg-red-500/10 border-red-500/20 text-red-600 dark:text-red-400"
             }`}
           >
@@ -410,88 +333,19 @@ export function LinkedinPostContainer() {
         </div>
       )}
 
-      {/* Official Shadcn UI Tabs Controller */}
-      <Tabs
-        value={activeTab}
-        onValueChange={(val) => setActiveTab(val as any)}
-        className="w-full"
-      >
-        <TabsList className="flex gap-1.5 p-1 bg-secondary/15 dark:bg-black/20 border border-border/40 backdrop-blur-md rounded-xl max-w-md mb-6 w-full h-auto!">
-          <TabsTrigger
-            value="shared"
-            className={`flex items-center justify-center gap-1.5 px-3.5 py-2 text-xs sm:text-sm font-medium rounded-lg transition-all cursor-pointer flex-1 h-auto! ${
-              activeTab === "shared"
-                ? "bg-purple-600! text-white! shadow-md! shadow-purple-600/10!"
-                : "text-muted-foreground hover:bg-secondary/40 hover:text-foreground bg-transparent! border-none!"
-            }`}
-          >
-            <History className="h-3.5 w-3.5" />
-            Shared
-          </TabsTrigger>
-          <TabsTrigger
-            value="scheduled"
-            className={`flex items-center justify-center gap-1.5 px-3.5 py-2 text-xs sm:text-sm font-medium rounded-lg transition-all cursor-pointer flex-1 h-auto! ${
-              activeTab === "scheduled"
-                ? "bg-purple-600! text-white! shadow-md! shadow-purple-600/10!"
-                : "text-muted-foreground hover:bg-secondary/40 hover:text-foreground bg-transparent! border-none!"
-            }`}
-          >
-            <Calendar className="h-3.5 w-3.5" />
-            Scheduled
-          </TabsTrigger>
-          <TabsTrigger
-            value="topics"
-            className={`flex items-center justify-center gap-1.5 px-3.5 py-2 text-xs sm:text-sm font-medium rounded-lg transition-all cursor-pointer flex-1 h-auto! ${
-              activeTab === "topics"
-                ? "bg-purple-600! text-white! shadow-md! shadow-purple-600/10!"
-                : "text-muted-foreground hover:bg-secondary/40 hover:text-foreground bg-transparent! border-none!"
-            }`}
-          >
-            <Lightbulb className="h-3.5 w-3.5" />
-            Topics
-          </TabsTrigger>
-          <TabsTrigger
-            value="templates"
-            className={`flex items-center justify-center gap-1.5 px-3.5 py-2 text-xs sm:text-sm font-medium rounded-lg transition-all cursor-pointer flex-1 h-auto! ${
-              activeTab === "templates"
-                ? "bg-purple-600! text-white! shadow-md! shadow-purple-600/10!"
-                : "text-muted-foreground hover:bg-secondary/40 hover:text-foreground bg-transparent! border-none!"
-            }`}
-          >
-            <FileText className="h-3.5 w-3.5" />
-            Templates
-          </TabsTrigger>
-        </TabsList>
+      {/* Dynamic Content based on selected tab from Sidebar */}
+      <div className="outline-none">
+        {activeTab === "shared" && <SharedHistory posts={sharedPosts} />}
 
-        <TabsContent value="shared" className="mt-4 outline-none">
-          <SharedHistory posts={sharedPosts} />
-        </TabsContent>
-
-        <TabsContent value="scheduled" className="mt-4 outline-none">
+        {activeTab === "scheduled" && (
           <ScheduledQueue
             posts={scheduledPosts}
             onDelete={handleDeleteScheduled}
             onBulkDelete={handleBulkDeleteScheduled}
           />
-        </TabsContent>
+        )}
 
-        <TabsContent value="topics" className="mt-4 outline-none">
-          <PostTopics
-            topics={postTopics}
-            onDelete={handleDeleteTopic}
-            onBulkDelete={handleBulkDeleteTopics}
-            onEdit={(id) =>
-              triggerAlert(
-                "success",
-                "Edit topic functionality to be implemented!",
-              )
-            }
-            onGenerate={handleGenerateContent}
-            onStatusChange={handleTopicStatusChange}
-          />
-        </TabsContent>
-
-        <TabsContent value="templates" className="mt-4 outline-none">
+        {activeTab === "templates" && (
           <TemplatesGrid
             templates={templates}
             onUseTemplate={handleUseTemplate}
@@ -511,8 +365,8 @@ export function LinkedinPostContainer() {
             onDeleteTemplate={handleDeleteTemplate}
             onEditTemplate={handleEditTemplate}
           />
-        </TabsContent>
-      </Tabs>
+        )}
+      </div>
     </div>
   );
 }

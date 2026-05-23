@@ -51,7 +51,7 @@ export function ForgotPasswordForm() {
               type="button"
               onClick={handleSendOtp}
               disabled={!identifier || otpSent || otpLoading}
-              className="h-10 px-3 text-xs font-medium bg-purple-600 hover:bg-purple-500 text-white transition-all active:scale-[0.98] disabled:opacity-50 shrink-0"
+              className="h-10 px-3 text-xs font-medium bg-indigo-600 hover:bg-indigo-500 text-white transition-all active:scale-[0.98] disabled:opacity-50 shrink-0"
             >
               {otpLoading ? "Sending..." : otpSent ? "OTP Sent" : "Send OTP"}
             </Button>
@@ -112,7 +112,7 @@ export function ForgotPasswordForm() {
         </div>
 
         {/* Forgot Password Button */}
-        <Button className="w-full mt-2 h-10 text-sm font-medium bg-purple-600 hover:bg-purple-500 text-white transition-all hover:scale-[1.02] hover:shadow-[0_0_20px_rgba(147,51,234,0.3)] border-none">
+        <Button className="w-full mt-2 h-10 text-sm font-medium bg-indigo-600 hover:bg-indigo-500 text-white transition-all hover:scale-[1.02] hover:shadow-[0_0_20px_rgba(147,51,234,0.3)] border-none">
           Reset Password
         </Button>
       </div>

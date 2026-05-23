@@ -65,7 +65,7 @@ export function LoginForm() {
         </div>
 
         {/* Sign In Button */}
-        <Button className="w-full mt-2 h-10 text-sm font-medium bg-purple-600 hover:bg-purple-500 text-white transition-all hover:scale-[1.02] hover:shadow-[0_0_20px_rgba(147,51,234,0.3)] border-none">
+        <Button className="w-full mt-2 h-10 text-sm font-medium bg-indigo-600 hover:bg-indigo-500 text-white transition-all hover:scale-[1.02] hover:shadow-[0_0_20px_rgba(147,51,234,0.3)] border-none">
           Sign in
         </Button>
 

@@ -20,7 +20,8 @@ export default function DashboardShell({ children }: DashboardShellProps) {
 
   // Prevent hydration mismatches
   useEffect(() => {
-    setMounted(true);
+    const timer = setTimeout(() => setMounted(true), 0);
+    return () => clearTimeout(timer);
   }, []);
 
   const handleLogout = () => {
@@ -28,13 +29,12 @@ export default function DashboardShell({ children }: DashboardShellProps) {
   };
 
   return (
-    <div className="flex h-screen overflow-hidden bg-background">
+    <div className="flex h-screen overflow-hidden bg-custom-gradient">
       {/* Sidebar (Desktop and Mobile Drawer) */}
       <Sidebar
         mobileMenuOpen={mobileMenuOpen}
         setMobileMenuOpen={setMobileMenuOpen}
         pathname={pathname}
-        handleLogout={handleLogout}
       />
 
       {/* Main Content Area */}
@@ -49,7 +49,7 @@ export default function DashboardShell({ children }: DashboardShellProps) {
         />
 
         {/* Main Content Pane */}
-        <main className="flex-1 overflow-y-auto p-4 md:p-6 bg-secondary/5 dark:bg-black/10">
+        <main className="flex-1 overflow-y-auto p-4 md:p-6 bg-custom-gradient">
           {children}
         </main>
       </div>

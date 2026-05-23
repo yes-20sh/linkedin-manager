@@ -4,9 +4,14 @@ import { LinkedinPostContainer } from "@/components/linkedin-post/linkedin-post-
 
 export const metadata: Metadata = {
   title: "LinkedIn Posts - Linkedin Manager",
-  description: "Compose, schedule, and use post templates for LinkedIn outreach.",
+  description:
+    "Compose, schedule, and use post templates for LinkedIn outreach.",
 };
 
 export default function LinkedinPostPage() {
-  return <LinkedinPostContainer />;
+  return (
+    <div className="bg-transparent h-full w-full min-h-screen">
+      <LinkedinPostContainer />
+    </div>
+  );
 }

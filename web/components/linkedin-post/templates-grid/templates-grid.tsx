@@ -3,8 +3,9 @@
 import React, { useState } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { Copy, Eye, Pencil, Trash2, X } from "lucide-react";
-import { TemplateCard } from "../template-card/template-card";
+import { Copy, X } from "lucide-react";
+import Image from "next/image";
+import { PostsCard } from "../postscard/postscard";
 import { CreateTemplate } from "../create-template/create-template";
 
 interface PostTemplate {
@@ -64,13 +65,18 @@ export function TemplatesGrid({
 
   return (
     <div className="space-y-6">
-      <div className="flex justify-between items-center">
-        <p className="text-[16px] text-muted-foreground">
-          Save structures to quickly reuse high-performance formats.
-        </p>
+      <div className="flex justify-between items-start">
+        <div className="space-y-1.5">
+          <h2 className="text-xl font-semibold tracking-tight">
+            Post Templates
+          </h2>
+          <p className="text-sm text-gray-800 dark:text-gray-300">
+            Save structures to quickly reuse high-performance formats.
+          </p>
+        </div>
         <Button
           onClick={() => setShowAddTemplate(!showAddTemplate)}
-          className="h-10 text-sm px-4 bg-purple-600 hover:bg-purple-500 text-white font-semibold gap-1.5 shadow-lg shadow-purple-600/10 transition-all active:scale-[0.98]"
+          className="h-10 text-sm px-4 bg-indigo-600 hover:bg-indigo-500 text-white font-semibold gap-1.5 shadow-lg shadow-indigo-600/10 transition-all active:scale-[0.98]"
         >
           {showAddTemplate ? "Collapse Editor" : "Create New Template"}
         </Button>
@@ -96,15 +102,21 @@ export function TemplatesGrid({
 
       {/* Grid display of templates cards */}
       {!showAddTemplate && (
-        <div className="grid gap-4 sm:grid-cols-2 md:grid-cols-3">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
           {templates.map((template) => (
-            <TemplateCard
+            <PostsCard
               key={template.id}
-              template={template}
-              onUseTemplate={onUseTemplate}
-              onDeleteTemplate={onDeleteTemplate}
-              onEditTemplate={onEditTemplate}
-              onViewTemplate={setSelectedViewTemplate}
+              post={{
+                id: template.id,
+                title: template.title,
+                content: template.description || template.content || "",
+                time: `${template.uses || 0} uses`,
+                topic: template.topic || template.category,
+                imageUrl: template.image,
+              }}
+              onDelete={onDeleteTemplate}
+              onEdit={() => onEditTemplate(template)}
+              onView={() => setSelectedViewTemplate(template)}
             />
           ))}
         </div>
@@ -120,10 +132,11 @@ export function TemplatesGrid({
           <Card className="relative w-full max-w-xl bg-card border border-border/40 backdrop-blur-xl shadow-2xl overflow-hidden rounded-2xl animate-in zoom-in-95 duration-200 z-10 max-h-[90vh] flex flex-col">
             {selectedViewTemplate.image && (
               <div className="relative w-full h-40 rounded-t-2xl overflow-hidden border-b border-border/10 shrink-0">
-                <img
+                <Image
                   src={selectedViewTemplate.image}
                   alt={selectedViewTemplate.title}
-                  className="w-full h-full object-cover"
+                  fill
+                  className="object-cover"
                 />
                 <div className="absolute inset-0 bg-linear-to-t from-background/80 to-transparent pointer-events-none" />
                 <Button
@@ -149,7 +162,7 @@ export function TemplatesGrid({
                 </Button>
               )}
               <div className="flex justify-between items-start">
-                <span className="inline-flex px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-purple-500/10 text-purple-600 dark:text-purple-400 uppercase tracking-wider">
+                <span className="inline-flex px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-indigo-500/10 text-indigo-600 dark:text-indigo-400 uppercase tracking-wider">
                   {selectedViewTemplate.topic ||
                     selectedViewTemplate.category ||
                     "General"}
@@ -165,7 +178,7 @@ export function TemplatesGrid({
               {(selectedViewTemplate.description ||
                 selectedViewTemplate.content) && (
                 <div className="space-y-1">
-                  <span className="text-[10px] uppercase font-bold text-purple-500/80 tracking-wider">
+                  <span className="text-[10px] uppercase font-bold text-indigo-500/80 tracking-wider">
                     Description
                   </span>
                   <p className="text-xs text-foreground leading-relaxed whitespace-pre-wrap">
@@ -178,7 +191,7 @@ export function TemplatesGrid({
               {/* AI Prompt */}
               {selectedViewTemplate.aiPrompt && (
                 <div className="space-y-1">
-                  <span className="text-[10px] uppercase font-bold text-purple-500/80 tracking-wider">
+                  <span className="text-[10px] uppercase font-bold text-indigo-500/80 tracking-wider">
                     System Prompt Instruction
                   </span>
                   <div className="bg-secondary/15 dark:bg-black/20 border border-border/30 rounded-xl p-3 max-h-32 overflow-y-auto">
@@ -192,7 +205,7 @@ export function TemplatesGrid({
               {/* HTML Image Template Live Render */}
               {selectedViewTemplate.htmlImageTemplate && (
                 <div className="space-y-1">
-                  <span className="text-[10px] uppercase font-bold text-purple-500/80 tracking-wider">
+                  <span className="text-[10px] uppercase font-bold text-indigo-500/80 tracking-wider">
                     HTML Image Template Preview
                   </span>
                   <div className="w-full h-48 bg-white rounded-xl border border-border/30 overflow-hidden shadow-sm relative">
@@ -232,7 +245,7 @@ export function TemplatesGrid({
                     onUseTemplate(selectedViewTemplate);
                     setSelectedViewTemplate(null);
                   }}
-                  className="h-10 text-sm bg-purple-600 hover:bg-purple-500 text-white font-semibold shadow-md shadow-purple-600/10 cursor-pointer rounded-lg gap-1.5 px-4 animate-pulse-subtle"
+                  className="h-10 text-sm bg-indigo-600 hover:bg-indigo-500 text-white font-semibold shadow-md shadow-indigo-600/10 cursor-pointer rounded-lg gap-1.5 px-4 animate-pulse-subtle"
                 >
                   <Copy className="h-3.5 w-3.5" />
                   Use Format

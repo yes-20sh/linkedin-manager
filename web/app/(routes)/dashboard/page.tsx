@@ -1,11 +1,8 @@
-import React from "react";
 import { Metadata } from "next";
-import {
-  Card,
-  CardContent,
-  CardHeader,
-} from "@/components/ui/card";
-import { History, Calendar } from "lucide-react";
+import { Card, CardTitle } from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
+import { Share2, Briefcase } from "lucide-react";
+import Link from "next/link";
 
 export const metadata: Metadata = {
   title: "Dashboard - Bunny",
@@ -13,62 +10,96 @@ export const metadata: Metadata = {
 };
 
 const DashboardPage = () => {
-  const stats = [
+  const cards = [
     {
-      title: "Shared Posts",
-      value: "3",
-      description: "posts published to LinkedIn",
-      icon: History,
-      color: "text-purple-500 bg-purple-500/10",
+      title: "LinkedIn Post",
+      description: "Manage, create, and schedule your LinkedIn posts",
+      icon: Share2,
+      color:
+        "bg-gradient-to-br from-blue-500 to-indigo-600 text-white shadow-sm",
+      href: "/linkedin-post",
     },
     {
-      title: "Scheduled Posts",
-      value: "2",
-      description: "posts queued for publishing",
-      icon: Calendar,
-      color: "text-amber-500 bg-amber-500/10",
+      title: "Job Hunting AI",
+      description: "AI-powered tools to accelerate your job search",
+      icon: Briefcase,
+      color:
+        "bg-gradient-to-br from-indigo-500 to-purple-600 text-white shadow-sm",
+      href: "#",
     },
   ];
 
   return (
-    <div className="space-y-6 max-w-6xl mx-auto animate-in fade-in duration-300">
+    <div className="space-y-6  mx-auto animate-in fade-in duration-300">
       {/* Header */}
       <div>
         <h1 className="text-2xl font-bold tracking-tight text-foreground sm:text-3xl">
           Dashboard
         </h1>
         <p className="text-xs sm:text-sm text-muted-foreground mt-0.5 sm:mt-1">
-          Welcome back! Here is an overview of your LinkedIn posts.
+          Welcome back! Select a module to get started.
         </p>
       </div>
 
-      {/* Stat Cards */}
-      <div className="grid gap-4 sm:grid-cols-2 max-w-xl">
-        {stats.map((stat) => {
-          const Icon = stat.icon;
+      {/* Category Filters / Quick Links */}
+      <div className="flex flex-wrap gap-2.5">
+        <Badge
+          variant="default"
+          className="cursor-pointer shadow-sm hover:bg-indigo-600 px-4 py-4 text-sm font-medium"
+        >
+          All
+        </Badge>
+        <Badge
+          variant="secondary"
+          className="cursor-pointer hover:bg-secondary/80 px-4 py-4 text-sm font-medium"
+        >
+          Social Media
+        </Badge>
+        <Badge
+          variant="secondary"
+          className="cursor-pointer hover:bg-secondary/80 px-4 py-4 text-sm font-medium"
+        >
+          Job Hunting
+        </Badge>
+        <Badge
+          variant="secondary"
+          className="cursor-pointer hover:bg-secondary/80 px-4 py-4 text-sm font-medium"
+        >
+          Interview Prep
+        </Badge>
+        <Badge
+          variant="secondary"
+          className="cursor-pointer hover:bg-secondary/80 px-4 py-4 text-sm font-medium"
+        >
+          Networking
+        </Badge>
+      </div>
+
+      {/* Action Cards */}
+      <div className="flex flex-wrap gap-4 mt-16">
+        {cards.map((item) => {
+          const Icon = item.icon;
           return (
-            <Card
-              key={stat.title}
-              className="bg-card/25 border-border/40 backdrop-blur-sm shadow-xs relative overflow-hidden group hover:border-border/80 transition-all duration-300 pb-0"
+            <Link
+              key={item.title}
+              href={item.href}
+              className="block group w-32 sm:w-36"
             >
-              <div className="absolute top-0 right-0 w-24 h-24 bg-purple-600/5 dark:bg-purple-600/2 rounded-full translate-x-8 -translate-y-8 blur-2xl group-hover:scale-150 transition-transform duration-500" />
-              <CardHeader className="flex flex-row items-center justify-between pb-2 space-y-0">
-                <span className="text-xs font-semibold text-muted-foreground uppercase tracking-wider">
-                  {stat.title}
-                </span>
-                <div className={`p-2 rounded-lg ${stat.color}`}>
-                  <Icon className="h-4 w-4" />
+              <Card
+                className={`aspect-square border-none shadow-md relative overflow-hidden transition-all duration-300 flex flex-col justify-center items-center p-3 hover:-translate-y-0.5 hover:shadow-lg ${item.color}`}
+              >
+                {/* Subtle glowing blob */}
+                <div className="absolute top-0 right-0 w-24 h-24 bg-white/5 rounded-full translate-x-8 -translate-y-8 blur-xl group-hover:scale-110 transition-transform duration-700" />
+                <div className="absolute bottom-0 left-0 w-20 h-20 bg-black/5 rounded-full -translate-x-6 translate-y-6 blur-lg" />
+
+                <div className="mb-3 relative z-10 p-2.5 bg-white/10 backdrop-blur-sm rounded-2xl shadow-inner border border-white/10">
+                  <Icon className="h-6 w-6 text-white drop-shadow-sm" />
                 </div>
-              </CardHeader>
-              <CardContent className="pb-6">
-                <div className="text-3xl font-bold tracking-tight text-foreground">
-                  {stat.value}
-                </div>
-                <p className="text-[11px] text-muted-foreground mt-1.5">
-                  {stat.description}
-                </p>
-              </CardContent>
-            </Card>
+                <CardTitle className="text-sm font-semibold text-center leading-tight text-white relative z-10">
+                  {item.title}
+                </CardTitle>
+              </Card>
+            </Link>
           );
         })}
       </div>
